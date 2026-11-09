@@ -72,6 +72,8 @@ final class Recs {
     /** TMDB's Animation genre (movies and shows: cartoons and anime), left out with Picks > Cartoons and anime off. */
     private static final int ANIMATION = 16;
     private static final long LIST_EVERY = 6 * 3600_000L;
+    /** Personalização: de quanto em quanto tempo as recomendações da tela inicial trocam (era 1 hora). */
+    private static final long ROTATE_MS = 3 * 60_000L;
     /** How often Trakt is asked whether the account changed (marked watched, the watchlist): one small request. */
     private static final long TRAKT_EVERY = 10 * 60_000L;
     /** Bump when what is saved for each title changes (the saved list is discarded and fetched again). */
@@ -373,7 +375,7 @@ final class Recs {
                 (p.mine == PROGRESS ? progress : p.mine == LIKED ? liked : list).add(p);
             }
         }
-        long hour = System.currentTimeMillis() / 3600_000L;
+        long hour = System.currentTimeMillis() / ROTATE_MS;
         // Trakt first: what they're in the middle of (as Trakt orders it), up to 2 in 5 cards, then their watchlist and
         // Trakt's recommendations, up to 3 in 5 with those; then TMDB's. A new set each hour; Trakt's fill the rest when
         // TMDB's run short. Never two from the same franchise ("Law & Order" and "Law & Order: Special…").

@@ -97,6 +97,8 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
     private static final float TILE_RADIUS = 22;
     // Tile focus (Apple TV style): it grows from the center and its shadow drops (it "rises" toward the viewer).
     private static final float FOCUS_GROW = 0.2f;
+    // Personalização: relógio no canto superior esquerdo (x, linha de base e tamanho, em pixels de uma tela 1920x1080).
+    private static final float CORNER_CLOCK_X = 80, CORNER_CLOCK_BASE = 62, CORNER_CLOCK_SIZE = 24;
     // Corner capsule.
     // Corner capsule: the height and top offset of the tvOS tab bar (68 and 46).
     private static final float CAPSULE_TOP = 46, CAPSULE_H = 68, BUTTON = 56;
@@ -218,6 +220,7 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
     private final List<HomeApps.Item> lightButtons = new ArrayList<>();
     private Paint lTitle, lTab, lTabOn, lCardTitle, lCardMeta, lQuote, lTip, lDate, lClock, lWeather, lClockQuote;
     private Shader lightGradient;
+    private Paint lCorner;
     // Continue Watching: the background takes the focused card's colour (worked out once per picture, WatchArt), easing
     // from one to the next. Drawn as a plain fill under a fixed shade, so a colour change creates nothing per frame.
     // Until the first picture's colour is in (a cold start reads the list and the pictures), the tint is a cool grey,
@@ -405,7 +408,7 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
             shadows.dither = dark() > 0.5f;
             switch (kind) {
                 case SKY: drawSky(c); break;
-                case HERO: drawLightTop(c); break;
+                case HERO: drawLightTop(c); drawCornerClock(c); break;
                 case STATUS: drawLightButtons(c); break;
                 case PLATTER: drawPlatter(c); break;
                 case TILES: drawTiles(c); break;
@@ -924,6 +927,7 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
         lQuote = Ui.numbers(Ui.regular, 21 * k, L_FAINT);
         lTip = Ui.text(Ui.semibold, 25 * k, L_INK);
         lTip.setTextAlign(Paint.Align.CENTER);
+        lCorner = Ui.numbers(Ui.medium, CORNER_CLOCK_SIZE * k, L_DIM);
         lDate = Ui.text(Ui.semibold, 34 * k, L_DIM);
         lClock = Ui.numbers(Ui.light, 200 * k, L_INK);
         lClock.setLetterSpacing(-0.01f);
@@ -1043,6 +1047,7 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
         if (updateClock()) {
             layoutStatus();
             status.invalidate();
+            heroLayer.invalidate();   // o relógio do canto
             if (hero != null && hero.clock) {
                 refreshHero(false);
                 heroLayer.invalidate();
@@ -1487,6 +1492,13 @@ final class HomeView extends ViewGroup implements Choreographer.FrameCallback, H
     }
 
     // MARK: - Background
+
+    /** Um relógio pequeno e discreto no canto superior esquerdo. */
+    private void drawCornerClock(Canvas c) {
+        if (lCorner == null || clockText.isEmpty()) return;
+        lCorner.setColor(tone(L_DIM, 0xFF98989D));
+        c.drawText(clockText, CORNER_CLOCK_X * k, CORNER_CLOCK_BASE * k, lCorner);
+    }
 
     private void drawSky(Canvas c) {
         drawLightSky(c);

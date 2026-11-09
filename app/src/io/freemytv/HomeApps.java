@@ -121,6 +121,12 @@ final class HomeApps {
         {"amediateka", "Амедиатека", "ru.amediateka", "E31E24", "", "1"},
         {"wink", "Wink", "ru.rt.video.app.tv", "FF5A1F", "", "1"},
         {"spotify", "Spotify", "com.spotify.tv.android", "1DB954", "", "1"},
+        {"smarttube", "SmartTube", "org.smarttube.stable", "FF0000", "", "1"},
+        {"tizentube", "TizenTube", "io.gh.reisxd.tizentube.cobalt", "FF0000", "", "1"},
+        {"stremio", "Stremio", "com.stremio.one", "7B5BF5", "", "1"},
+        {"claro", "Claro tv+", "br.com.claro.now.smarttvclient", "E30613", "", "1"},
+        {"sbt", "SBT", "br.com.sbt.mais", "1E88E5", "", "1"},
+        {"nuvio", "Nuvio", "com.nuvio.tv", "8E8E93", "", "1"},
     };
     /**
      * Apps the shelf shows at once (it scrolls for the rest): 8, today's smallest tiles (178 wide in HomeView's 1760 of
